@@ -23,10 +23,16 @@ resource "azurerm_linux_web_app" "webapp01" {
   location            = azurerm_service_plan.plan01.location
   service_plan_id     = azurerm_service_plan.plan01.id
 
-  site_config {}
+  site_config {
+  }
 
   app_settings = {
     ApplicationInsights__InstrumentationKey = azurerm_application_insights.insights01.instrumentation_key
+    DbConnectionString = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv01.name};SecretName=DbConnectionString)"
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 }
 
